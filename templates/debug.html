@@ -1,0 +1,210 @@
+{% load static %}
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Debug Page</title>
+
+	<link href="{% static 'assets/css/materialIcons.css' %}" rel="stylesheet">
+    <link href="{% static 'assets/css/openSans.css' %}" rel='stylesheet' type='text/css' />
+
+	<link href="{% static 'assets/materialize/css/materialize.min.css' %}" rel="stylesheet" media="screen,projection" />
+    <link href="{% static 'assets/css/bootstrap.css' %}" rel="stylesheet" />
+    <link href="{% static 'assets/fontawesome/css/all.css' %}" rel="stylesheet" />
+    <link href="{% static 'assets/css/custom-styles.css' %}" rel="stylesheet" />
+    <script src="{% static 'assets/js/jquery-1.10.2.js' %}"></script>
+    <script src="{% static 'assets/js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'assets/materialize/js/materialize.min.js' %}"></script>
+    <script src="{% static 'assets/js/Chart.js' %}"></script>
+</head>
+<body>
+    <style>
+
+    </style>
+
+    <div class="row">
+
+        <div class="col-md-8 col-sm-12 col-xs-12">
+            <div class="panel panel-default">
+                <div style="margin-top: 10px">
+                    <form action="add" method="POST" id="graph">
+
+                        {% csrf_token %}
+
+                        <div class="btn-group">
+                            <button data-toggle="dropdown" class="btn btn-primary dropdown-toggle" aria-expanded="false" id="productButton">Product <span class="caret"></span></button>
+                            <ul class="dropdown-menu">
+                                {% for item in x_Item_Type %}
+                                <li><a href="#" onclick="setProduct('{{item}}')">{{item}}</a></li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+
+                        <div class="btn-group">
+                                <button data-toggle="dropdown" class="btn btn-info dropdown-toggle" aria-expanded="false" id="attributeButton">Attribute <span class="caret"></span></button>
+                                <ul class="dropdown-menu">
+                                    <li><a href="#" onclick="setAttrib('Item_MRP')">M.R.P.</a></li>
+                                    <li><a href="#" onclick="setAttrib('Item_Visibility')">Visibility</a></li>
+                                    <li><a href="#" onclick="setAttrib('Item_Outlet_Sales')">Sales</a></li>
+                                </ul>
+                            </div>
+
+                            <div class="btn-group">
+                                <button data-toggle="dropdown" class="btn btn-warning dropdown-toggle" aria-expanded="false" id="timeSpanButton">Time Span <span class="caret"></span></button>
+                                <ul class="dropdown-menu">
+                                    <li><a href="#" onclick="setAllTime()">All Time</a></li>
+                                    <li class="divider"></li>
+                                    <li><a href="#" onclick="showYearField()">Yearly </a></li>
+                                    <li><a href="#" onclick="showMonthField()">Monthly </a></li>
+                                    <li><a href="#" onclick="showDayField()">Daily </a></li>
+                                </ul>
+                            </div>
+
+
+                            <div class="btn-group">
+                                <div class="extraButton" id="yearSelection">
+                                    <button data-toggle="dropdown" class="btn btn-warning dropdown-toggle" aria-expanded="false" id="yearButton">Select Year <span class="caret"></span></button>
+                                    <ul class="dropdown-menu">
+                                        <li><a href="#" onclick="setYear(2017)">2017 </a></li>
+                                        <li><a href="#" onclick="setYear(2018)">2018 </a></li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <div class="btn-group">
+                                <div class="extraButton" id="monthSelection">
+                                    <button data-toggle="dropdown" class="btn btn-warning dropdown-toggle" aria-expanded="false" id="monthButton">Select Month <span class="caret"></span></button>
+                                    <ul class="dropdown-menu">
+                                        <li><a href="#" onclick="setMonth(1)">Jan </a></li>
+                                        <li><a href="#" onclick="setMonth(2)">Feb </a></li>
+                                        <li><a href="#" onclick="setMonth(3)">Mar </a></li>
+                                        <li><a href="#" onclick="setMonth(4)">Apr </a></li>
+                                        <li><a href="#" onclick="setMonth(5)">May </a></li>
+                                        <li><a href="#" onclick="setMonth(6)">Jun </a></li>
+                                        <li><a href="#" onclick="setMonth(7)">Jul </a></li>
+                                        <li><a href="#" onclick="setMonth(8)">Aug </a></li>
+                                        <li><a href="#" onclick="setMonth(9)">Sept </a></li>
+                                        <li><a href="#" onclick="setMonth(10)">Oct </a></li>
+                                        <li><a href="#" onclick="setMonth(11)">Nov </a></li>
+                                        <li><a href="#" onclick="setMonth(12)">Dec </a></li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <div class="pull-right">
+
+                                <input name="parameters" type="hidden" id="dfs">
+                                <input type="submit" style="visibility: hidden" id="graphButton">
+                                {% block buttons %}
+                                    <a href="#" class="btn btn-succes" onclick="verifyAll()">Submit</a>
+                                    <a href="/debug" class="btn btn-danger" onclick="resetAll()">Reset</a>
+                                {% endblock %}
+                            </div>
+                        </form>
+                    </div>
+
+                </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <canvas id="chart1"></canvas>
+        {% block chart %}
+        {% endblock %}
+    </div>
+
+
+    <script>
+        table = {}
+        table.product = "none"
+        table.attrib = "none"
+        table.month = 0
+        table.year = 0
+
+        month = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sept", "Oct", "Nov", "Dec"]
+
+        function setProduct(p)
+    {
+        table.product = p
+        document.getElementById("productButton").innerHTML = p
+        console.log("Product set to : ", table.product)
+    }
+    function setAttrib(a)
+    {
+        table.attrib = a
+
+        document.getElementById("attributeButton").innerHTML = a
+
+        console.log("Attrib set to : ", table.attrib )
+    }
+
+    function setAllTime()
+    {
+        document.getElementById("timeSpanButton").innerHTML = "All Time"
+
+        document.getElementById("yearSelection").classList.remove("show")
+        document.getElementById("monthSelection").classList.remove("show")
+        table.year = 0
+        table.month = 0
+    }
+
+    function setYear(y)
+    {
+        document.getElementById("yearButton").innerHTML = y
+
+        table.year = y
+        console.log("Year Set to ", table.year)
+    }
+
+    function setMonth(m)
+    {
+        document.getElementById("monthButton").innerHTML = month[m-1]
+
+        table.month = m
+        console.log("Month set to ", table.month)
+    }
+
+
+
+    function showYearField()
+    {
+        document.getElementById("timeSpanButton").innerHTML = "Yearly"
+
+        document.getElementById("yearSelection").classList.add("show")
+        document.getElementById("monthSelection").classList.remove("show")
+        console.log("Time Span set to Yearly")
+    }
+
+
+    function showMonthField()
+    {
+        document.getElementById("timeSpanButton").innerHTML = "Monthly"
+
+        document.getElementById("yearSelection").classList.add("show")
+        document.getElementById("monthSelection").classList.add("show")
+        console.log("Time span set to Monthly")
+    }
+
+    function showDayField()
+    {
+
+    }
+
+    function verifyAll()
+    {
+        console.log(table)
+
+        data = table.product + ","
+         + table.month+ ","
+          + table.year+ ","
+           + table.attrib;
+        document.getElementById('dfs').value = data;
+
+        document.getElementById('graphButton').click();
+
+    }
+</script>
+</body>
+</html>

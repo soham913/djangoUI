@@ -1,0 +1,435 @@
+<script>
+    table = {}
+    table.product1 = "none"
+    table.attrib1 = "none"
+    table.monthWise1 = false
+    table.month1 = 0
+    table.year1 = 0
+
+    table.extraChart = false
+    table.product2 = "none"
+    table.attrib2 = "none"
+    table.monthWise2
+    table.month2 = 0
+    table.year2 = 0
+
+    month = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sept", "Oct", "Nov", "Dec"]
+
+    function setProduct(p)
+{
+    table.product1 = p
+    document.getElementById("productButton").innerHTML = p
+    console.log("Product set to : ", table.product1)
+}
+function setAttrib(a)
+{
+    table.attrib1 = a
+
+    document.getElementById("attributeButton").innerHTML = a
+
+    console.log("Attrib set to : ", table.attrib1 )
+}
+function setAttrib2(a)
+{
+    table.attrib2 = a
+
+    document.getElementById("attribute2Button").innerHTML = a
+
+    console.log("Attrib 2 set to : ", table.attrib2 )
+}
+
+/*function setAllTime()
+{
+    document.getElementById("timeSpanButton").innerHTML = "All Time"
+
+    document.getElementById("yearSelection").classList.remove("show")
+    document.getElementById("monthSelection").classList.remove("show")
+    table.year1 = 0
+    table.month1 = 0
+}*/
+
+function setYear(y)
+{
+    document.getElementById("yearButton").innerHTML = y
+
+    table.year1 = y
+    console.log("Year Set to ", table.year1)
+}
+function setYear2(y)
+{
+    document.getElementById("year2Button").innerHTML = y
+
+    table.year2 = y
+    console.log("Year 2 Set to ", table.year2)
+}
+
+function setMonth(m)
+{
+    document.getElementById("monthButton").innerHTML = month[m-1]
+
+    table.month1 = m
+    console.log("Month set to ", table.month1)
+}
+function setMonth2(m)
+{
+    document.getElementById("month2Button").innerHTML = month[m-1]
+
+    table.month2 = m
+    console.log("Month 2 set to ", table.month2)
+}
+
+
+
+function showYearField()
+{
+    document.getElementById("timeSpanButton").innerHTML = "Yearly"
+
+    document.getElementById("yearSelection").classList.add("show")
+    document.getElementById("monthSelection").classList.remove("show")
+    console.log("Time Span set to Yearly")
+
+    table.monthWise1 = false
+}
+
+
+function showMonthField()
+{
+    document.getElementById("timeSpanButton").innerHTML = "Monthly"
+
+    document.getElementById("yearSelection").classList.add("show")
+    document.getElementById("monthSelection").classList.add("show")
+
+    table.monthWise1 = true
+    console.log("Time span set to Monthly")
+}
+
+function validate1()
+{
+    if(table.product1 == "none")
+    {
+        alert("Please Select The Product1")
+        return false
+    }
+    else if(table.attrib1 == "none")
+    {
+        alert("Please Select The Attribute")
+        return false
+    }
+    else if(table.year1 == 0)
+    {
+        alert("Please Select The Time Span Year")
+        return false
+    }
+    else if(table.month1 == 0 && table.monthWise1 == true)
+    {
+        alert("Please Select The month")
+        return false
+    }
+    else return true
+}
+
+function validate2()
+{
+    if(table.product2 == "none")
+    {
+        alert("Please Select The Product1")
+        return false
+    }
+    else if(table.attrib2 == "none")
+    {
+        alert("Please Select The Attribute")
+        return false
+    }
+    else if(table.year2 == 0)
+    {
+        alert("Please Select The Time Span Year")
+        return false
+    }
+    else if(table.month2 == 0 && table.monthWise2 == true)
+    {
+        alert("Please Select The month")
+        return false
+    }
+    else return true
+}
+function verifyAll()
+{
+    //console.log(table)
+
+    data = table.product1 + ","
+            + table.month1 + ","
+            + table.year1 + ","
+            + table.attrib1 + ","
+
+            + table.extraChart + ","
+
+            + table.product2 + ","
+            + table.month2 + ","
+            + table.year2 + ","
+            + table.attrib2 + ",";
+
+    document.getElementById('dfs').value = data;
+    console.log(data)
+
+   if(table.extraChart)
+    {
+        if(validate2())
+        {
+            console.log(data)
+
+            document.getElementById('graphButton').click();
+        }
+    }
+    else if(validate1())
+    {
+        console.log(data)
+        document.getElementById('graphButton').click();
+    }
+}
+
+function addNewChart()
+{
+    table.extraChart = !table.extraChart
+    if (table.extraChart)
+    {
+        if(validate1() == true)
+        {
+            document.getElementById("timeSpanButton").disabled = true
+            document.getElementById("yearSelection").disabled = true
+            document.getElementById("productButton").disabled = true
+            document.getElementById("attributeButton").disabled = true
+
+
+            document.getElementById("2ndRow").classList.remove("extraButton")
+            document.getElementById("timeSpan2Button").disabled = true
+            document.getElementById("year2Selection").classList.add("show")
+
+            if(table.monthWise1 == false)
+            {
+                table.monthWise2 = false
+
+                document.getElementById("timeSpan2Button").innerHTML = "Yearly"
+            }
+            else
+            {
+                table.monthWise2 = true
+
+                document.getElementById("timeSpan2Button").innerHTML = "Monthly"
+                document.getElementById("month2Selection").classList.add("show")
+            }
+
+            document.getElementById("addChartButton").innerHTML = "Remove Chart"
+            console.log("extraChart : ", table.extraChart)
+        }
+        else
+        {
+            table.extraChart = !table.extraChart
+            alert("Please fill details for first graph to add next graph")
+            console.log("extraChart : ", table.extraChart)
+        }
+    }
+    else
+    {
+        document.getElementById("2ndRow").classList.add("extraButton")
+        document.getElementById("addChartButton").innerHTML = "Add Chart"
+        console.log("extraChart : ", table.extraChart)
+    }
+
+
+}
+
+function setProduct2(p)
+{
+    table.product2 = p
+    document.getElementById("product2Button").innerHTML = p
+
+    if( p != table.product1)
+    {
+        table.attrib2 = table.attrib1
+
+        document.getElementById("attribute2Button").innerHTML = table.attrib2
+        document.getElementById("attribute2Button").disabled = true
+    }
+    else
+    {
+        table.attrib2 = "none"
+        document.getElementById("attribute2Button").innerHTML = 'Attribute <span class="caret"></span>'
+        document.getElementById("attribute2Button").disabled = false
+    }
+}
+
+function getRandomColor(num) {
+    colors = []
+    for(var j =0; j < num; j++)
+    {
+
+        var letters = '0123456789ABCDEF'.split('');
+        var color = '#';
+        for (var i = 0; i < 6; i++ ) {
+            color += letters[Math.floor(Math.random() * 16)];
+        }
+        color += 'aa'
+        colors.push(color)
+    }
+    return colors;
+}
+
+
+new Chart(document.getElementById("visibilityRadar"), {
+    type: 'radar',
+    data: {
+        labels: {{xRadarList|safe}},
+        datasets: [{
+            fill: true,
+            backgroundColor: "rgba(255,99,132,0.2)",
+            borderColor: "rgba(255,99,132,1)",
+            pointBorderColor: "#fff",
+            pointBackgroundColor: "rgba(255,99,132,1)",
+            pointBorderColor: "#fff",
+            data: {{yVisibility|safe}}
+        }]
+    },
+
+    options: {
+        legend :
+        {
+            display : false
+        },
+        scale: {
+            fontSize : 18
+        }
+    }
+});
+
+bgColors = [
+'rgba(255, 99, 132, 0.2)',
+'rgba(54, 162, 235, 0.2)',
+'rgba(255, 206, 86, 0.2)',
+'rgba(75, 192, 192, 0.2)',
+'rgba(153, 102, 255, 0.2)',
+'rgba(255, 159, 64, 0.2)',
+'rgba(255, 99, 132, 0.2)',
+'rgba(54, 162, 235, 0.2)',
+'rgba(255, 206, 86, 0.2)',
+'rgba(75, 192, 192, 0.2)',
+'rgba(153, 102, 255, 0.2)',
+'rgba(255, 159, 64, 0.2)',
+'rgba(255, 99, 132, 0.2)',
+'rgba(54, 162, 235, 0.2)',
+'rgba(255, 206, 86, 0.2)',
+'rgba(75, 192, 192, 0.2)']
+
+borderColors =[
+'rgba(255,99,132,1)',
+'rgba(54, 162, 235, 1)',
+'rgba(255, 206, 86, 1)',
+'rgba(75, 192, 192, 1)',
+'rgba(153, 102, 255, 1)',
+'rgba(255, 159, 64, 1)',
+'rgba(255,99,132,1)',
+'rgba(54, 162, 235, 1)',
+'rgba(255, 206, 86, 1)',
+'rgba(75, 192, 192, 1)',
+'rgba(153, 102, 255, 1)',
+'rgba(255, 159, 64, 1)',
+'rgba(255,99,132,1)',
+'rgba(54, 162, 235, 1)',
+'rgba(255, 206, 86, 1)',
+'rgba(75, 192, 192, 1)'
+]
+
+new Chart(
+    document.getElementById("salesHBar").getContext("2d"),
+    {
+    type: 'horizontalBar',
+    data: {
+    labels: {{xHBarList|safe}},
+    datasets: [{
+        label: 'AVerage Sales',
+        data: {{yHBarSales|safe}},
+        backgroundColor: bgColors,
+        borderColor: borderColors,
+        borderWidth: 1
+    }]
+    },
+    options: {
+    scales: {
+        xAxes: [{
+        ticks: {
+            autoSkip : false,
+
+            fontSize : 17
+        }
+        }],
+        yAxes : [{
+            ticks : {
+                fontSize : 18
+            }
+        }]
+    },
+    legend : {
+        display : false
+    }
+    }
+});
+
+new Chart(
+    document.getElementById("bubbleChart"),
+    {
+        type: 'bubble',
+        data: {
+        labels: "Africa",
+        datasets:
+        [
+        {% for point in points%}
+            {
+                label: "{{point.label|safe}}",
+                backgroundColor: getRandomColor(1),
+                borderColor: "rgba(255,221,50,1)",
+                data:
+                [
+                    {
+                        x: {{point.x|safe}},
+                        r: {{point.y|safe}} * 500,
+                        y: {{point.r|safe}}
+                    }
+                ]
+            },
+        {% endfor %}
+        ]},
+
+        options: {
+
+            tooltips: {
+                callbacks: {
+                    label: function(tooltipItem, data) {
+                        return data.datasets[tooltipItem.datasetIndex].label + "  Weight : " + Number(tooltipItem.yLabel) +" Sales : " + Number(tooltipItem.xLabel);
+                    }
+                }
+            },
+
+            title: {
+                display: true,
+                text: 'Items and their Attributes'
+            },
+            scales: {
+                yAxes: [{
+                    scaleLabel: {
+                        display: true,
+                        labelString: "Weight",
+                        fontSize : 20
+                    }
+                }],
+                xAxes: [{
+                    scaleLabel: {
+                        display: true,
+                        labelString: "Average Sales",
+                        fontSize : 20
+                    }
+                }]
+            }
+        }
+    }
+);
+
+</script>

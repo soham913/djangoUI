@@ -1,0 +1,34 @@
+<script>
+
+    function verifyAll()
+    {
+        itemWeight = document.forms["Form"]["weight"].value;
+        itemMRP = document.forms["Form"]["price"].value;
+        itemVisibility = document.forms["Form"]["visibility"].value;
+        outletEstablishmentYear = document.forms["Form"]["outletEstablishmentYear"].value;
+        itemFatContent = document.forms["Form"]["fat"].value;
+        itemType = document.forms["Form"]["product"].value;
+        outletSize = document.forms["Form"]["outletSize"].value;
+        outletLocationType = document.forms["Form"]["outletLocationType"].value;
+        outletType = document.forms["Form"]["outletType"].value;
+
+        if(itemWeight == null || itemWeight == "" || itemMRP == null || itemMRP == "" || itemVisibility == null || itemVisibility == "" || outletEstablishmentYear == null || outletEstablishmentYear == "" || itemFatContent == null || itemFatContent == "" || itemType == null || itemType == "" || outletSize == null || outletSize == "" || outletLocationType == null || outletLocationType == "" || outletType == null || outletType == "")
+            alert("Please Fill in all the fields")
+        else
+        {   data =
+            itemWeight + ","
+            + itemMRP + ","
+            + itemVisibility + ","
+            + outletEstablishmentYear + ","
+            + itemFatContent + ","
+            + itemType + ","
+            + outletSize + ","
+            + outletLocationType + ","
+            + outletType
+
+            console.log(data)
+            document.getElementById('dfs').value = data
+            document.getElementById('predictionButton').click()
+        }
+    }
+</script>

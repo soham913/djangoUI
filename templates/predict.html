@@ -1,0 +1,83 @@
+{% extends 'salesPrediction.html' %}
+
+{% block script %}
+<script>
+    args = {{parameters|safe}}
+    console.log(args)
+
+    document.forms["Form"]["weight"].value = args[0] ;
+    document.forms["Form"]["weight"].disabled = true ;
+
+    document.forms["Form"]["price"].value = args[1] ;
+    document.forms["Form"]["price"].disabled = true ;
+
+    document.forms["Form"]["visibility"].value = args[2] ;
+    document.forms["Form"]["visibility"].disabled = true ;
+
+    document.forms["Form"]["outletEstablishmentYear"].value = args[3];
+    document.forms["Form"]["outletEstablishmentYear"].disabled = true ;
+
+    document.forms["Form"]["fat"].value = args[4].toString() ;
+    document.forms["Form"]["fat"].disabled = true ;
+
+    document.forms["Form"]["product"].value = args[5].toString() ;
+    document.forms["Form"]["product"].disabled = true ;
+
+    document.forms["Form"]["outletSize"].value = args[6].toString() ;
+    document.forms["Form"]["outletSize"].disabled = true ;
+
+    document.forms["Form"]["outletLocationType"].value = args[7].toString() ;
+    document.forms["Form"]["outletLocationType"].disabled = true ;
+
+    document.forms["Form"]["outletType"].value = args[8].toString() ;
+    document.forms["Form"]["outletType"].disabled = true ;
+</script>
+{% endblock %}
+
+
+{% block afterPredict %}
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-action">
+                <b><h1>Result Of Prediction : </h1></b>
+            </div>
+            <div class="card-content">
+                <div class="row">
+
+                    <div class="col-md-6">
+                        <div class="alert alert-success">
+                            <strong>Predicted Outlet Sales : </strong> {{Predicted}}
+                        </div>
+                    </div>
+                    <!-- <div class="col-md-6">
+                        {% if Actual == -1%}
+                        <div class="alert alert-danger">
+                            <strong>Entry with following Attributes Not Found!</strong> <br>Value of Prediction Cannot Be Varified<small><br> Refer RMSE Value for evaluation of prediction</small>
+                        </div>
+                        {% else %}
+                        <div class="alert alert-warning">
+                            <strong>Actual Outlet Sales : </strong> {{Actual}}
+                        </div>
+
+                        {% endif %}
+                    </div> -->
+                <!-- </div> -->
+
+                <!-- <div class="row"> -->
+                    <div class="col-md-6">
+                        <div class="alert alert-info">
+                            <strong>RMSE Value : </strong> {{RMSE}}
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+<div class="row  pull-right">
+        <a href="/salesPrediction" class="btn btn-danger" onclick="resetAll()">Reset</a>
+</div>
+{% endblock %}

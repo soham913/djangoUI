@@ -1,0 +1,325 @@
+{% load static %}
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SuperMarket Dashboard</title>
+
+	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css' />
+
+	<link href="{% static 'assets/materialize/css/materialize.min.css' %}" rel="stylesheet" media="screen,projection" />
+    <link href="{% static 'assets/css/bootstrap.css' %}" rel="stylesheet" />
+    <link href="{% static 'assets/fontawesome/css/all.css' %}" rel="stylesheet" />
+    <link href="{% static 'assets/css/custom-styles.css' %}" rel="stylesheet" />
+
+
+    <script src="{% static 'assets/js/jquery-1.10.2.js' %}"></script>
+    <script src="{% static 'assets/js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'assets/materialize/js/materialize.min.js' %}"></script>
+    <script src="{% static 'assets/js/jquery.metisMenu.js' %}"></script>
+    <script src="{% static 'assets/js/Chart.js' %}"></script>
+    <script src="{% static 'assets/js/dashboardCharts.js' %}"></script>
+
+
+</head>
+    <body>
+        <div id="wrapper">
+
+<!--/. NAV TOP  -->
+            <nav class="navbar navbar-default top-navbar" role="navigation">
+
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".sidebar-collapse">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+
+                    <a class="navbar-brand waves-effect waves-dark" href="/"><i class="large material-icons dp48">shopping_cart</i><strong>Super Market</strong></a>
+
+                    <div id="sideNav" class="waves-effect waves-dark" href="/"><i class="material-icons dp48">toc</i></div>
+                </div>
+
+            </nav>
+
+
+
+<!-- /. NAV SIDE  -->
+            <nav class="navbar-default navbar-side" role="navigation">
+                <div class="sidebar-collapse">
+                <ul class="nav" id="main-menu">
+                    <li>
+                        <a href="/" class="waves-effect waves-dark"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
+                    </li>
+
+                    <li>
+                        <a class="active-menu waves-effect waves-dark"><i class="fas fa-chart-bar"></i> Analysis<span class="fa arrow"></span></a>
+                        <ul class="nav nav-second-level">
+                            <li>
+                                <a href="#" class="active-menu"> Product Wise</a>
+                            </li>
+                            <li>
+                                <a href="/analysisOutlet"> Outlet Wise</a>
+                            </li>
+                            <li>
+                                <a href="/analysisSupplier"> Supplier Wise</a>
+                            </li>
+                        </ul>
+                    </li>
+
+                    <li>
+                        <a href="/salesPrediction" class="waves-effect waves-dark"><i class="fas fa-database"></i> Sales Prediction</a>
+                    </li>
+
+                    <li>
+                        <a href="/aboutUs" class="waves-effect waves-dark"><i class="fa fa-info-circle"></i> About Us</a>
+                    </li>
+                </ul>
+                </div>
+            </nav>
+
+            <div id="page-wrapper">
+                <div class="header">
+                    <h1 class="page-header">
+                        Analysis <small>Product Wise</small>
+                    </h1>
+
+                    <ol class="breadcrumb">
+                        <li><a href="/">Home</a></li>
+                        <li class="active"><a href="#">Analysis</a></li>
+                        <li class="active">Product Wise</li>
+                    </ol>
+                </div>
+
+                <div id="page-inner">
+
+                        <div class="row">
+                            <div class="col-md-12 col-sm-12 col-xs-12">
+                                <div class="panel panel-default">
+                                            <div class="panel-heading">
+                                            <div class="card-title">
+                                                {% block buttons %}
+                                                <form action="add" method="POST" id="graph">
+
+                                                    {% csrf_token %}
+
+                                                <div class="btn-group">
+                                                    <button data-toggle="dropdown" class="btn btn-primary dropdown-toggle" aria-expanded="false" id="productButton">Product <span class="caret"></span></button>
+                                                    <ul class="dropdown-menu">
+                                                        {% for item in x_Item_Type %}
+                                                        <li><a href="#" onclick="setProduct('{{item}}')">{{item}}</a></li>
+                                                        {% endfor %}
+                                                    </ul>
+                                                </div>
+
+                                                <div class="btn-group">
+                                                    <button data-toggle="dropdown" class="btn btn-info dropdown-toggle" aria-expanded="false" id="attributeButton">Attribute <span class="caret"></span></button>
+                                                    <ul class="dropdown-menu">
+                                                        <li><a href="#" onclick="setAttrib('Item_MRP')">M.R.P.</a></li>
+                                                        <li><a href="#" onclick="setAttrib('Item_Visibility')">Visibility</a></li>
+                                                        <li><a href="#" onclick="setAttrib('Item_Outlet_Sales')">Sales</a></li>
+                                                    </ul>
+                                                </div>
+
+                                                <div class="btn-group">
+                                                    <button data-toggle="dropdown" class="btn btn-warning dropdown-toggle" aria-expanded="false" id="timeSpanButton">Time Span <span class="caret"></span></button>
+                                                    <ul class="dropdown-menu">
+                                                        <li><a href="#" onclick="showYearField()">Yearly </a></li>
+                                                        <li><a href="#" onclick="showMonthField()">Monthly </a></li>
+                                                    </ul>
+                                                </div>
+
+                                                <div class="btn-group">
+                                                    <div class="extraButton" id="yearSelection">
+                                                        <button data-toggle="dropdown" class="btn btn-warning dropdown-toggle" aria-expanded="false" id="yearButton">Select Year <span class="caret"></span></button>
+                                                        <ul class="dropdown-menu">
+                                                            <li><a href="#" onclick="setYear(2017)">2017 </a></li>
+                                                            <li><a href="#" onclick="setYear(2018)">2018 </a></li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+
+                                                <div class="btn-group">
+                                                        <div class="extraButton" id="monthSelection">
+                                                            <button data-toggle="dropdown" class="btn btn-warning dropdown-toggle" aria-expanded="false" id="monthButton">Select Month <span class="caret"></span></button>
+                                                            <ul class="dropdown-menu">
+                                                                <li><a href="#" onclick="setMonth(1)">Jan </a></li>
+                                                                <li><a href="#" onclick="setMonth(2)">Feb </a></li>
+                                                                <li><a href="#" onclick="setMonth(3)">Mar </a></li>
+                                                                <li><a href="#" onclick="setMonth(4)">Apr </a></li>
+                                                                <li><a href="#" onclick="setMonth(5)">May </a></li>
+                                                                <li><a href="#" onclick="setMonth(6)">Jun </a></li>
+                                                                <li><a href="#" onclick="setMonth(7)">Jul </a></li>
+                                                                <li><a href="#" onclick="setMonth(8)">Aug </a></li>
+                                                                <li><a href="#" onclick="setMonth(9)">Sept </a></li>
+                                                                <li><a href="#" onclick="setMonth(10)">Oct </a></li>
+                                                                <li><a href="#" onclick="setMonth(11)">Nov </a></li>
+                                                                <li><a href="#" onclick="setMonth(12)">Dec </a></li>
+                                                            </ul>
+                                                        </div>
+                                                </div>
+
+                                                <div class="pull-right">
+                                                    <input name="parameters" type="hidden" id="dfs">
+                                                    <input type="submit" style="visibility: hidden" id="graphButton">
+
+                                                        <a href="#" class="btn btn-succes" onclick="verifyAll()">Submit</a>
+                                                        <a href="/analysisProduct" class="btn btn-danger" onclick="resetAll()">Reset</a>
+                                                        <a href="#" class="btn btn-default" onclick="addNewChart()" id="addChartButton">Add Chart</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                                <div class="panel-heading extraButton" id="2ndRow">
+                                                    <div class="card-title">
+                                                        <div class="btn-group">
+                                                                <button data-toggle="dropdown" class="btn btn-primary dropdown-toggle" aria-expanded="false" id="product2Button">Product <span class="caret"></span></button>
+                                                                <ul class="dropdown-menu">
+                                                                    {% for item in x_Item_Type %}
+                                                                    <li><a href="#" onclick="setProduct2('{{item}}')">{{item}}</a></li>
+                                                                    {% endfor %}
+                                                                </ul>
+                                                            </div>
+
+                                                            <div class="btn-group">
+                                                                <button data-toggle="dropdown" class="btn btn-info dropdown-toggle" aria-expanded="false" id="attribute2Button">Attribute <span class="caret"></span></button>
+                                                                <ul class="dropdown-menu">
+                                                                    <li><a href="#" onclick="setAttrib2('Item_MRP')">M.R.P.</a></li>
+                                                                    <li><a href="#" onclick="setAttrib2('Item_Visibility')">Visibility</a></li>
+                                                                    <li><a href="#" onclick="setAttrib2('Item_Outlet_Sales')">Sales</a></li>
+                                                                </ul>
+                                                            </div>
+
+                                                            <div class="btn-group">
+                                                                <button data-toggle="dropdown" class="btn btn-warning dropdown-toggle" aria-expanded="false" id="timeSpan2Button">Time Span <span class="caret"></span></button>
+                                                                <ul class="dropdown-menu">
+                                                                    <li><a href="#" onclick="showYearField2()">Yearly </a></li>
+                                                                    <li><a href="#" onclick="showMonthField2()">Monthly </a></li>
+                                                                    <li><a href="#" onclick="showDayField2()">Daily </a></li>
+                                                                </ul>
+                                                            </div>
+
+                                                            <div class="btn-group">
+                                                                <div class="extraButton" id="year2Selection">
+                                                                    <button data-toggle="dropdown" class="btn btn-warning dropdown-toggle" aria-expanded="false" id="year2Button">Select Year <span class="caret"></span></button>
+                                                                    <ul class="dropdown-menu">
+                                                                        <li><a href="#" onclick="setYear2(2017)">2017 </a></li>
+                                                                        <li><a href="#" onclick="setYear2(2018)">2018 </a></li>
+                                                                    </ul>
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="btn-group">
+                                                                    <div class="extraButton" id="month2Selection">
+                                                                        <button data-toggle="dropdown" class="btn btn-warning dropdown-toggle" aria-expanded="false" id="month2Button">Select Month <span class="caret"></span></button>
+                                                                        <ul class="dropdown-menu">
+                                                                            <li><a href="#" onclick="setMonth2(1)">Jan </a></li>
+                                                                            <li><a href="#" onclick="setMonth2(2)">Feb </a></li>
+                                                                            <li><a href="#" onclick="setMonth2(3)">Mar </a></li>
+                                                                            <li><a href="#" onclick="setMonth2(4)">Apr </a></li>
+                                                                            <li><a href="#" onclick="setMonth2(5)">May </a></li>
+                                                                            <li><a href="#" onclick="setMonth2(6)">Jun </a></li>
+                                                                            <li><a href="#" onclick="setMonth2(7)">Jul </a></li>
+                                                                            <li><a href="#" onclick="setMonth2(8)">Aug </a></li>
+                                                                            <li><a href="#" onclick="setMonth2(9)">Sept </a></li>
+                                                                            <li><a href="#" onclick="setMonth2(10)">Oct </a></li>
+                                                                            <li><a href="#" onclick="setMonth2(11)">Nov </a></li>
+                                                                            <li><a href="#" onclick="setMonth2(12)">Dec </a></li>
+                                                                        </ul>
+                                                                    </div>
+                                                            </div>
+                                                    </div>
+                                                </div>
+
+                                                </form>
+                                                {% endblock %}
+
+
+                                        <div class="card-image" style="margin : 10px;">
+                                            <canvas id="chart1" height="125px"></canvas>
+                                            <canvas id="chart2" height="1px"></canvas>
+                                            {% block chart %}
+                                            <script>
+                                                new Chart(
+                                                    document.getElementById("chart1").getContext("2d"),
+                                                {
+                                                    type : 'line',
+                                                    data : {
+
+                                                    },
+                                                    options: {
+                                                        scales: {
+                                                            xAxes: [{
+                                                                ticks: {
+                                                                    autoSkip : false,
+                                                                    maxRotation: 90,
+                                                                    minRotation: 80
+                                                                }
+                                                            }],
+                                                            yAxes: [{
+                                                                ticks: {
+                                                                    max : 5,
+                                                                   beginAtZero : true
+                                                                }
+                                                            }]
+                                                        },
+                                                        legend : {
+                                                            display : false
+                                                        }
+                                                    }
+                                                }
+                                            );
+                                            </script>
+                                            {% endblock %}
+                                        </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                                <div class="col-md-6">
+                                    <div class="card">
+                                        <div class="card-action">
+                                            Products and their Visibility
+                                        </div>
+                                        <div class="card-image">
+                                            <canvas id="visibilityRadar"></canvas>
+                                        </div>
+                                        <div class="card-action">
+                                            &nbsp;
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="card">
+                                        <div class="card-image">
+                                            <canvas id="bubbleChart" height="175px"></canvas>
+                                        </div>
+                                        <div class="card-action" style="color : red;">
+                                            *Note : Here radius indicates scaled Visibility
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="card">
+                                                <div class="card-action">
+                                                    Products and their Average Sales
+                                                </div>
+                                                <div class="card-image">
+                                                    <canvas id="salesHBar"></canvas>
+                                                </div>
+                                            </div>
+                                        </div>
+                            </div>
+                    </div>
+                </div>
+        </div>
+
+{% include 'analysisProductScript.html' %}
+    </body>
+</html>

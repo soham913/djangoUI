@@ -1,0 +1,48 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <canvas id="trial"></canvas>
+    <script>
+            new Chart(
+                document.getElementById("trial").getContext("2d"),
+                {
+                type: 'scatter',
+                data: {
+                labels: ,
+                datasets: [{
+                    label: 'Total Count',
+                    data: ,
+                    backgroundColor: bgColors,
+                    borderColor: borderColors,
+                    borderWidth: 1
+                }]
+                },
+                options: {
+                scales: {
+                    xAxes: [{
+                    ticks: {
+                        display : false
+                    }
+                    }],
+                    yAxes: [{
+                        ticks: {
+                            fontSize: 18
+                        }
+                    }],
+                },
+
+                legend : {
+                    display : false
+                }
+                }
+            });
+    </script>
+
+
+</body>
+</html>

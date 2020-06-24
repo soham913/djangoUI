@@ -1,0 +1,142 @@
+{% extends 'supplierChartSelection.html' %}
+
+{%block supplierInfo %}
+<div class="panel-heading">
+        Supplier Selected : {{parameters.9|safe}}
+    </div>
+{% endblock %}
+
+{% block chart %}
+<script>
+        args = {{parameters|safe}}
+        console.log(args)
+
+
+        if(args[4] == "false")
+        {
+            new Chart(
+                document.getElementById("chart1").getContext("2d"),
+                {
+                    type: 'line',
+                    data: {
+                        {% if x1Data %}
+                        labels: {{x1Data|safe}},
+                        {% endif %}
+                        datasets: [
+                            {
+                                label: args[3] + " of " + args[0],
+                                fill : false,
+                                borderColor : "#F00",
+                                borderWidth : 1,
+                                {% if y1Data %}
+                                data: {{y1Data|safe}}
+                                {% endif %}
+                            },
+                        ]
+                },
+                options: {
+                elements : {
+                    line : {
+                        tension : 0
+                    }
+                }
+                }
+            });
+        }
+        else if(args[4] == "true" && args[1] == 0 && args[3] == args[8])
+        {
+            new Chart(
+                document.getElementById("chart1").getContext("2d"),
+                {
+                    type: 'line',
+                    data: {
+                        {% if x1Data %}
+                        labels: {{x1Data|safe}},
+                        {% endif %}
+                        datasets: [
+                            {
+                                label: '[' + args[2] + '] ' + args[3] + " of " + args[0],
+                                fill : false,
+                                borderColor : "#F00",
+                                borderWidth : 1,
+                                {% if y1Data %}
+                                data: {{y1Data|safe}}
+                                {% endif %}
+                            },
+                            {
+                                label: '[' + args[7] + '] ' + args[8] + " of " + args[5],
+                                fill : false,
+                                borderColor : "#0F0",
+                                borderWidth : 1,
+                                {% if y2Data %}
+                                data: {{y2Data|safe}}
+                                {% endif %}
+                            }
+                        ]
+                },
+                options: {
+
+                }
+            });
+        }
+        else
+        {
+            document.getElementById("chart1").height = 65
+            document.getElementById("chart2").height = 65
+            new Chart(
+                document.getElementById("chart1").getContext("2d"),
+                {
+                    type: 'line',
+                    data: {
+                        {% if x1Data %}
+                        labels: {{x1Data|safe}},
+                        {% endif %}
+                        datasets: [
+                            {
+                                label: args[3] + " of " + args[0],
+                                fill : false,
+                                borderColor : "#00F",
+                                borderWidth : 1,
+                                {% if y1Data %}
+                                data: {{y1Data|safe}},
+                                {% endif %}
+                            }
+                        ]
+                },
+                options: {
+                }
+            });
+
+            new Chart(
+                document.getElementById("chart2").getContext("2d"),
+                {
+                    type: 'line',
+                    data: {
+                        {% if x2Data %}
+                        labels: {{x2Data|safe}},
+                        {% endif %}
+                        datasets: [
+                            {
+                                label: args[8] + " of " + args[5],
+                                fill : false,
+                                borderColor : "#F00",
+                                borderWidth : 1,
+                                {% if y2Data %}
+                                data: {{y2Data|safe}},
+                                {% endif %}
+                            }
+                        ]
+                },
+                options: {
+                }
+            });
+        }
+    </script>
+{% endblock %}
+
+{% block buttons %}
+<div class="pull-right">
+
+<a href="/analysisSupplier" class="btn btn-danger" onclick="resetAll()">Reset</a>
+</div>
+{% endblock %}

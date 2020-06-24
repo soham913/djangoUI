@@ -1,0 +1,458 @@
+{% extends 'analysisSupplier.html' %}
+
+{% block inner %}
+        <div class="row">
+                <div class="col-md-12 col-sm-12 col-xs-12">
+                    <div class="panel panel-default">
+                        {%block supplierInfo %}
+                        <div class="panel-heading">
+                            Supplier Selected : {{parameters|safe}}
+                        </div>
+                        {% endblock %}
+                                <div class="panel-heading">
+                                <div class="card-title">
+                                    {% block buttons %}
+                                    <form action="showChart" method="POST" id="graph">
+
+                                        {% csrf_token %}
+
+                                    <div class="btn-group">
+                                        <button data-toggle="dropdown" class="btn btn-primary dropdown-toggle" aria-expanded="false" id="productButton">Product <span class="caret"></span></button>
+                                        <ul class="dropdown-menu">
+                                            {% for item in x_Item_Type %}
+                                            <li><a href="#" onclick="setProduct('{{item}}')">{{item}}</a></li>
+                                            {% endfor %}
+                                        </ul>
+                                    </div>
+
+                                    <div class="btn-group">
+                                        <button data-toggle="dropdown" class="btn btn-info dropdown-toggle" aria-expanded="false" id="attributeButton">Attribute <span class="caret"></span></button>
+                                        <ul class="dropdown-menu">
+                                            <li><a href="#" onclick="setAttrib('Item_MRP')">M.R.P.</a></li>
+                                            <li><a href="#" onclick="setAttrib('Item_Visibility')">Visibility</a></li>
+                                            <li><a href="#" onclick="setAttrib('Item_Outlet_Sales')">Sales</a></li>
+                                        </ul>
+                                    </div>
+
+                                    <div class="btn-group">
+                                        <button data-toggle="dropdown" class="btn btn-warning dropdown-toggle" aria-expanded="false" id="timeSpanButton">Time Span <span class="caret"></span></button>
+                                        <ul class="dropdown-menu">
+                                            <li><a href="#" onclick="showYearField()">Yearly </a></li>
+                                            <li><a href="#" onclick="showMonthField()">Monthly </a></li>
+                                        </ul>
+                                    </div>
+
+                                    <div class="btn-group">
+                                        <div class="extraButton" id="yearSelection">
+                                            <button data-toggle="dropdown" class="btn btn-warning dropdown-toggle" aria-expanded="false" id="yearButton">Select Year <span class="caret"></span></button>
+                                            <ul class="dropdown-menu">
+                                                <li><a href="#" onclick="setYear(2017)">2017 </a></li>
+                                                <li><a href="#" onclick="setYear(2018)">2018 </a></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+
+                                    <div class="btn-group">
+                                            <div class="extraButton" id="monthSelection">
+                                                <button data-toggle="dropdown" class="btn btn-warning dropdown-toggle" aria-expanded="false" id="monthButton">Select Month <span class="caret"></span></button>
+                                                <ul class="dropdown-menu">
+                                                    <li><a href="#" onclick="setMonth(1)">Jan </a></li>
+                                                    <li><a href="#" onclick="setMonth(2)">Feb </a></li>
+                                                    <li><a href="#" onclick="setMonth(3)">Mar </a></li>
+                                                    <li><a href="#" onclick="setMonth(4)">Apr </a></li>
+                                                    <li><a href="#" onclick="setMonth(5)">May </a></li>
+                                                    <li><a href="#" onclick="setMonth(6)">Jun </a></li>
+                                                    <li><a href="#" onclick="setMonth(7)">Jul </a></li>
+                                                    <li><a href="#" onclick="setMonth(8)">Aug </a></li>
+                                                    <li><a href="#" onclick="setMonth(9)">Sept </a></li>
+                                                    <li><a href="#" onclick="setMonth(10)">Oct </a></li>
+                                                    <li><a href="#" onclick="setMonth(11)">Nov </a></li>
+                                                    <li><a href="#" onclick="setMonth(12)">Dec </a></li>
+                                                </ul>
+                                            </div>
+                                    </div>
+
+                                    <div class="pull-right">
+                                        <input name="parameters" type="hidden" id="dfs">
+                                        <input type="submit" style="visibility: hidden" id="graphButton">
+
+                                            <a href="#" class="btn btn-succes" onclick="verifyAll()">Submit</a>
+                                            <a href="/analysisSupplier" class="btn btn-danger" onclick="resetAll()">Reset</a>
+                                            <a href="#" class="btn btn-default" onclick="addNewChart()" id="addChartButton">Add Chart</a>
+                                    </div>
+                                </div>
+                            </div>
+                                    <div class="panel-heading extraButton" id="2ndRow">
+                                        <div class="card-title">
+                                            <div class="btn-group">
+                                                    <button data-toggle="dropdown" class="btn btn-primary dropdown-toggle" aria-expanded="false" id="product2Button">Product <span class="caret"></span></button>
+                                                    <ul class="dropdown-menu">
+                                                        {% for item in x_Item_Type %}
+                                                        <li><a href="#" onclick="setProduct2('{{item}}')">{{item}}</a></li>
+                                                        {% endfor %}
+                                                    </ul>
+                                                </div>
+
+                                                <div class="btn-group">
+                                                    <button data-toggle="dropdown" class="btn btn-info dropdown-toggle" aria-expanded="false" id="attribute2Button">Attribute <span class="caret"></span></button>
+                                                    <ul class="dropdown-menu">
+                                                        <li><a href="#" onclick="setAttrib2('Item_MRP')">M.R.P.</a></li>
+                                                        <li><a href="#" onclick="setAttrib2('Item_Visibility')">Visibility</a></li>
+                                                        <li><a href="#" onclick="setAttrib2('Item_Outlet_Sales')">Sales</a></li>
+                                                    </ul>
+                                                </div>
+
+                                                <div class="btn-group">
+                                                    <button data-toggle="dropdown" class="btn btn-warning dropdown-toggle" aria-expanded="false" id="timeSpan2Button">Time Span <span class="caret"></span></button>
+                                                    <ul class="dropdown-menu">
+                                                        <li><a href="#" onclick="showYearField2()">Yearly </a></li>
+                                                        <li><a href="#" onclick="showMonthField2()">Monthly </a></li>
+                                                        <li><a href="#" onclick="showDayField2()">Daily </a></li>
+                                                    </ul>
+                                                </div>
+
+                                                <div class="btn-group">
+                                                    <div class="extraButton" id="year2Selection">
+                                                        <button data-toggle="dropdown" class="btn btn-warning dropdown-toggle" aria-expanded="false" id="year2Button">Select Year <span class="caret"></span></button>
+                                                        <ul class="dropdown-menu">
+                                                            <li><a href="#" onclick="setYear2(2017)">2017 </a></li>
+                                                            <li><a href="#" onclick="setYear2(2018)">2018 </a></li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+
+                                                <div class="btn-group">
+                                                        <div class="extraButton" id="month2Selection">
+                                                            <button data-toggle="dropdown" class="btn btn-warning dropdown-toggle" aria-expanded="false" id="month2Button">Select Month <span class="caret"></span></button>
+                                                            <ul class="dropdown-menu">
+                                                                <li><a href="#" onclick="setMonth2(1)">Jan </a></li>
+                                                                <li><a href="#" onclick="setMonth2(2)">Feb </a></li>
+                                                                <li><a href="#" onclick="setMonth2(3)">Mar </a></li>
+                                                                <li><a href="#" onclick="setMonth2(4)">Apr </a></li>
+                                                                <li><a href="#" onclick="setMonth2(5)">May </a></li>
+                                                                <li><a href="#" onclick="setMonth2(6)">Jun </a></li>
+                                                                <li><a href="#" onclick="setMonth2(7)">Jul </a></li>
+                                                                <li><a href="#" onclick="setMonth2(8)">Aug </a></li>
+                                                                <li><a href="#" onclick="setMonth2(9)">Sept </a></li>
+                                                                <li><a href="#" onclick="setMonth2(10)">Oct </a></li>
+                                                                <li><a href="#" onclick="setMonth2(11)">Nov </a></li>
+                                                                <li><a href="#" onclick="setMonth2(12)">Dec </a></li>
+                                                            </ul>
+                                                        </div>
+                                                </div>
+                                        </div>
+                                    </div>
+
+                                    </form>
+                                    {% endblock %}
+
+
+                            <div class="card-image" style="margin : 10px;">
+                                <canvas id="chart1" height="125px"></canvas>
+                                <canvas id="chart2" height="1px"></canvas>
+                                {% block chart %}
+                                <script>
+                                    new Chart(
+                                        document.getElementById("chart1").getContext("2d"),
+                                    {
+                                        type : 'line',
+                                        data : {
+
+                                        },
+                                        options: {
+                                            scales: {
+                                                xAxes: [{
+                                                    ticks: {
+                                                        autoSkip : false,
+                                                        maxRotation: 90,
+                                                        minRotation: 80
+                                                    }
+                                                }],
+                                                yAxes: [{
+                                                    ticks: {
+                                                        max : 5,
+                                                       beginAtZero : true
+                                                    }
+                                                }]
+                                            },
+                                            legend : {
+                                                display : false
+                                            }
+                                        }
+                                    }
+                                );
+                                </script>
+                                {% endblock %}
+                            </div>
+                    </div>
+                </div>
+            </div>
+    </div>
+{% endblock %}
+
+{% block script %}
+<script>
+        table = {}
+        table.product1 = "none"
+        table.attrib1 = "none"
+        table.monthWise1 = false
+        table.month1 = 0
+        table.year1 = 0
+
+        table.extraChart = false
+        table.product2 = "none"
+        table.attrib2 = "none"
+        table.monthWise2
+        table.month2 = 0
+        table.year2 = 0
+
+        month = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sept", "Oct", "Nov", "Dec"]
+
+        function setProduct(p)
+    {
+        table.product1 = p
+        document.getElementById("productButton").innerHTML = p
+        console.log("Product set to : ", table.product1)
+    }
+    function setAttrib(a)
+    {
+        table.attrib1 = a
+
+        document.getElementById("attributeButton").innerHTML = a
+
+        console.log("Attrib set to : ", table.attrib1 )
+    }
+    function setAttrib2(a)
+    {
+        table.attrib2 = a
+
+        document.getElementById("attribute2Button").innerHTML = a
+
+        console.log("Attrib 2 set to : ", table.attrib2 )
+    }
+
+    /*function setAllTime()
+    {
+        document.getElementById("timeSpanButton").innerHTML = "All Time"
+
+        document.getElementById("yearSelection").classList.remove("show")
+        document.getElementById("monthSelection").classList.remove("show")
+        table.year1 = 0
+        table.month1 = 0
+    }*/
+
+    function setYear(y)
+    {
+        document.getElementById("yearButton").innerHTML = y
+
+        table.year1 = y
+        console.log("Year Set to ", table.year1)
+    }
+    function setYear2(y)
+    {
+        document.getElementById("year2Button").innerHTML = y
+
+        table.year2 = y
+        console.log("Year 2 Set to ", table.year2)
+    }
+
+    function setMonth(m)
+    {
+        document.getElementById("monthButton").innerHTML = month[m-1]
+
+        table.month1 = m
+        console.log("Month set to ", table.month1)
+    }
+    function setMonth2(m)
+    {
+        document.getElementById("month2Button").innerHTML = month[m-1]
+
+        table.month2 = m
+        console.log("Month 2 set to ", table.month2)
+    }
+
+
+
+    function showYearField()
+    {
+        document.getElementById("timeSpanButton").innerHTML = "Yearly"
+
+        document.getElementById("yearSelection").classList.add("show")
+        document.getElementById("monthSelection").classList.remove("show")
+        console.log("Time Span set to Yearly")
+
+        table.monthWise1 = false
+    }
+
+
+    function showMonthField()
+    {
+        document.getElementById("timeSpanButton").innerHTML = "Monthly"
+
+        document.getElementById("yearSelection").classList.add("show")
+        document.getElementById("monthSelection").classList.add("show")
+
+        table.monthWise1 = true
+        console.log("Time span set to Monthly")
+    }
+
+    function validate1()
+    {
+        if(table.product1 == "none")
+        {
+            alert("Please Select The Product1")
+            return false
+        }
+        else if(table.attrib1 == "none")
+        {
+            alert("Please Select The Attribute")
+            return false
+        }
+        else if(table.year1 == 0)
+        {
+            alert("Please Select The Time Span Year")
+            return false
+        }
+        else if(table.month1 == 0 && table.monthWise1 == true)
+        {
+            alert("Please Select The month")
+            return false
+        }
+        else return true
+    }
+
+    function validate2()
+    {
+        if(table.product2 == "none")
+        {
+            alert("Please Select The Product1")
+            return false
+        }
+        else if(table.attrib2 == "none")
+        {
+            alert("Please Select The Attribute")
+            return false
+        }
+        else if(table.year2 == 0)
+        {
+            alert("Please Select The Time Span Year")
+            return false
+        }
+        else if(table.month2 == 0 && table.monthWise2 == true)
+        {
+            alert("Please Select The month")
+            return false
+        }
+        else return true
+    }
+    function verifyAll()
+    {
+        //console.log(table)
+
+        data = table.product1 + ","
+                + table.month1 + ","
+                + table.year1 + ","
+                + table.attrib1 + ","
+
+                + table.extraChart + ","
+
+                + table.product2 + ","
+                + table.month2 + ","
+                + table.year2 + ","
+                + table.attrib2 + ","
+                + "{{parameters|safe}}";
+
+        document.getElementById('dfs').value = data;
+        console.log(data)
+
+       if(table.extraChart)
+        {
+            if(validate2())
+            {
+                console.log(data)
+
+                document.getElementById('graphButton').click();
+            }
+        }
+        else if(validate1())
+        {
+            console.log(data)
+            document.getElementById('graphButton').click();
+        }
+    }
+
+    function addNewChart()
+    {
+        table.extraChart = !table.extraChart
+        if (table.extraChart)
+        {
+            if(validate1() == true)
+            {
+                document.getElementById("timeSpanButton").disabled = true
+                document.getElementById("yearSelection").disabled = true
+                document.getElementById("productButton").disabled = true
+                document.getElementById("attributeButton").disabled = true
+
+
+                document.getElementById("2ndRow").classList.remove("extraButton")
+                document.getElementById("timeSpan2Button").disabled = true
+                document.getElementById("year2Selection").classList.add("show")
+
+                if(table.monthWise1 == false)
+                {
+                    table.monthWise2 = false
+
+                    document.getElementById("timeSpan2Button").innerHTML = "Yearly"
+                }
+                else
+                {
+                    table.monthWise2 = true
+
+                    document.getElementById("timeSpan2Button").innerHTML = "Monthly"
+                    document.getElementById("month2Selection").classList.add("show")
+                }
+
+                document.getElementById("addChartButton").innerHTML = "Remove Chart"
+                console.log("extraChart : ", table.extraChart)
+            }
+            else
+            {
+                table.extraChart = !table.extraChart
+                alert("Please fill details for first graph to add next graph")
+                console.log("extraChart : ", table.extraChart)
+            }
+        }
+        else
+        {
+            document.getElementById("2ndRow").classList.add("extraButton")
+            document.getElementById("addChartButton").innerHTML = "Add Chart"
+            console.log("extraChart : ", table.extraChart)
+        }
+
+
+    }
+
+    function setProduct2(p)
+    {
+        table.product2 = p
+        document.getElementById("product2Button").innerHTML = p
+
+        if( p != table.product1)
+        {
+            table.attrib2 = table.attrib1
+
+            document.getElementById("attribute2Button").innerHTML = table.attrib2
+            document.getElementById("attribute2Button").disabled = true
+        }
+        else
+        {
+            table.attrib2 = "none"
+            document.getElementById("attribute2Button").innerHTML = 'Attribute <span class="caret"></span>'
+            document.getElementById("attribute2Button").disabled = false
+        }
+    }
+
+
+
+    </script>
+{% endblock %}

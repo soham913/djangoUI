@@ -1,0 +1,290 @@
+<script>
+
+        function getRandomColor(num) {
+            colors = []
+            for(var j =0; j < num; j++)
+            {
+
+                var letters = '0123456789ABCDEF'.split('');
+                var color = '#';
+                for (var i = 0; i < 6; i++ ) {
+                    color += letters[Math.floor(Math.random() * 16)];
+                }
+                color += 'aa'
+                colors.push(color)
+            }
+            return colors;
+        }
+
+        console.log(getRandomColor(10))
+    bgColors = [
+    'rgba(255, 99, 132, 0.2)',
+    'rgba(54, 162, 235, 0.2)',
+    'rgba(255, 206, 86, 0.2)',
+    'rgba(75, 192, 192, 0.2)',
+    'rgba(153, 102, 255, 0.2)',
+    'rgba(255, 159, 64, 0.2)',
+    'rgba(255, 99, 132, 0.2)',
+    'rgba(54, 162, 235, 0.2)',
+    'rgba(255, 206, 86, 0.2)',
+    'rgba(75, 192, 192, 0.2)',
+    'rgba(153, 102, 255, 0.2)',
+    'rgba(255, 159, 64, 0.2)',
+    'rgba(255, 99, 132, 0.2)',
+    'rgba(54, 162, 235, 0.2)',
+    'rgba(255, 206, 86, 0.2)',
+    'rgba(75, 192, 192, 0.2)']
+
+    borderColors =[
+    'rgba(255,99,132,1)',
+    'rgba(54, 162, 235, 1)',
+    'rgba(255, 206, 86, 1)',
+    'rgba(75, 192, 192, 1)',
+    'rgba(153, 102, 255, 1)',
+    'rgba(255, 159, 64, 1)',
+    'rgba(255,99,132,1)',
+    'rgba(54, 162, 235, 1)',
+    'rgba(255, 206, 86, 1)',
+    'rgba(75, 192, 192, 1)',
+    'rgba(153, 102, 255, 1)',
+    'rgba(255, 159, 64, 1)',
+    'rgba(255,99,132,1)',
+    'rgba(54, 162, 235, 1)',
+    'rgba(255, 206, 86, 1)',
+    'rgba(75, 192, 192, 1)'
+    ]
+
+                new Chart(
+                    document.getElementById("typeVSCountBar").getContext("2d"),
+                    {
+                    type: 'bar',
+                    data: {
+                    labels: {{x_Item_Type|safe}},
+                    datasets: [{
+                        label: 'Total Count',
+                        data: {{y_Count_Item_Type|safe}},
+                        backgroundColor: bgColors,
+                        borderColor: borderColors,
+                        borderWidth: 1
+                    }]
+                    },
+                    options: {
+                    scales: {
+                        xAxes: [{
+                        ticks: {
+                            display : false
+                        }
+                        }],
+                        yAxes: [{
+                            ticks: {
+                                fontSize: 18
+                            }
+                        }],
+                    },
+
+                    legend : {
+                        display : false
+                    }
+                    }
+                });
+
+
+                new Chart(document.getElementById("fatContentDonut").getContext("2d"), {
+                    type: 'line',
+                    data: {
+                      labels: ['20-40','40-60','60-80','80-100','100-120','120-140','140-160','160-180','180-200','200-220','220-240','240-260','260-280'],
+                      datasets: [{
+                          data: {{ySales|safe}},
+                          borderColor: "#3e95cd",
+                          fill: false
+                        }
+                      ]
+                    },
+                    options: {
+                        legend : {
+                            display : false
+                        },
+                        scales: {
+                            yAxes: [{
+                                ticks: {
+                                    fontSize: 18
+                                }
+                            }],
+                            xAxes: [{
+                                ticks: {
+                                    fontSize: 18
+                                }
+                            }]
+                        }
+                    }
+                  });
+/*new Chart(document.getElementById("fatContentDonut").getContext("2d"),
+{
+    type: 'doughnut',
+    data: {
+      labels: {{x_Item_Fat_Content|safe}},
+      datasets: [
+        {
+          backgroundColor: ["#8e5ea2","#3cba9f"],
+          data: {{y_Count_Item_Fat_Content|safe}}
+        }
+      ]
+    },
+	// Options
+	options: {
+        cutOutPercentage : 20
+    }
+
+    });*/
+    new Chart(document.getElementById("monthlySalesAVG"), {
+        type: 'line',
+        data: {
+          labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sept", "Oct", "Nov", "Dec"],
+          datasets: [
+            {
+                label: "2017",
+                backgroundColor: "#46BFBD66",
+                borderColor : "#46BFBD",
+                fill : 'origin',
+
+                pointBackgroundColor : "#FFF",
+                pointBorderColor : "#46BFBD",
+                pointBorderWidth : 2,
+                pointRadius : 4,
+
+                pointHoverBackgroundColor : "#FFF",
+                pointHoverBorderColor : "#46BFBD",
+                pointHoverBorderWidth : 3,
+                pointHoverRadius : 7,
+
+                data: {{y17L|safe}}
+            }, {
+                label: "2018",
+                backgroundColor: "#FDB45C66",
+                borderColor : "#FDB45C",
+                fill : 'origin',
+
+                pointBackgroundColor : "#FFF",
+                pointBorderColor : "#FDB45C",
+                pointBorderWidth : 2,
+                pointRadius : 4,
+
+                pointHoverBackgroundColor : "#FFF",
+                pointHoverBorderColor : "#FDB45C",
+                pointHoverBorderWidth : 3,
+                pointHoverRadius : 7,
+
+                data: {{y18L|safe}}
+            }
+          ]
+        },
+        options: {
+            tooltips : {
+                mode : "point"
+            },
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        fontSize: 20
+                    }
+                }],
+                xAxes: [{
+                    ticks: {
+                        fontSize: 20
+                    }
+                }]
+            }
+        }
+    });
+    new Chart(
+        document.getElementById("outletWiseSales").getContext("2d"),
+        {
+        type: 'bar',
+        data: {
+        labels: {{xOutlet|safe}},
+        datasets: [{
+            label: 'Total Sales',
+            data: {{yOutletSales|safe}},
+            backgroundColor: bgColors,
+            borderColor: borderColors,
+            borderWidth: 1
+        }]
+        },
+        options: {
+        scales: {
+            xAxes: [{
+                ticks: {
+                    autoSkip : false,
+                    maxRotation: 90,
+                    minRotation: 80,
+                    fontSize : 15
+                }
+            }],
+            yAxes: [{
+                ticks: {
+                    fontSize: 15
+                }
+            }],
+        },
+        legend : {
+            display : false
+        }
+        }
+    });
+
+    xAxis = {{xSupplier|safe}}
+    yAxis = {{ySupplierSales|safe}}
+    new Chart(
+        document.getElementById("supplierWiseSales").getContext("2d"),
+        {
+        type: 'bar',
+        data: {
+        labels: xAxis,
+        datasets: [{
+            label: 'Total Sales',
+            data: yAxis,
+            backgroundColor: getRandomColor(xAxis.length),
+            borderColor: borderColors,
+            borderWidth: 1
+        }]
+        },
+        options: {
+        scales: {
+            xAxes: [{
+            ticks: {
+     display : false
+            }
+            }],
+            yAxes: [{
+                ticks: {
+                    fontSize: 20
+                }
+            }],
+        },
+        legend : {
+            display : false
+        }
+        }
+    });
+    xAxis = {{xTier|safe}}
+    yAxis = {{yTierSales|safe}}
+    new Chart(
+        document.getElementById("tierWiseSales").getContext("2d"),
+        {
+        type: 'pie',
+        data: {
+        labels: xAxis,
+        datasets: [{
+            label: 'Total Sales',
+            data: yAxis,
+            backgroundColor: getRandomColor(xAxis.length),
+            borderColor: borderColors,
+            borderWidth: 1
+        }]
+        },
+        options: {
+            cutOutPercentage : 20,
+            maintainAspectRation : false
+        }
+    });
+</script>

@@ -1,0 +1,280 @@
+{% load static %}
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SuperMarket Dashboard</title>
+
+	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css' />
+
+	<link href="{% static 'assets/materialize/css/materialize.min.css' %}" rel="stylesheet" media="screen,projection" />
+    <link href="{% static 'assets/css/bootstrap.css' %}" rel="stylesheet" />
+    <link href="{% static 'assets/fontawesome/css/all.css' %}" rel="stylesheet" />
+    <link href="{% static 'assets/css/custom-styles.css' %}" rel="stylesheet" />
+
+
+    <script src="{% static 'assets/js/jquery-1.10.2.js' %}"></script>
+    <script src="{% static 'assets/js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'assets/materialize/js/materialize.min.js' %}"></script>
+    <script src="{% static 'assets/js/jquery.metisMenu.js' %}"></script>
+    <script src="{% static 'assets/js/Chart.js' %}"></script>
+    <script src="{% static 'assets/js/dashboardCharts.js' %}"></script>
+
+
+</head>
+    <body>
+        <div id="wrapper">
+
+    <!--/. NAV TOP  -->
+            <nav class="navbar navbar-default top-navbar" role="navigation">
+
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".sidebar-collapse">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+
+                    <a class="navbar-brand waves-effect waves-dark" href="/"><i class="large material-icons dp48">shopping_cart</i><strong>Super Market</strong></a>
+
+                    <div id="sideNav" class="waves-effect waves-dark" href="/"><i class="material-icons dp48">toc</i></div>
+                </div>
+
+            </nav>
+
+
+
+    <!-- /. NAV SIDE  -->
+            <nav class="navbar-default navbar-side" role="navigation">
+                <div class="sidebar-collapse">
+                <ul class="nav" id="main-menu">
+                    <li>
+                        <a href="/" class="active-menu waves-effect waves-dark"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
+                    </li>
+
+                    <li>
+                        <a class="waves-effect waves-dark"><i class="fas fa-chart-bar"></i> Analysis<span class="fa arrow"></span></a>
+                        <ul class="nav nav-second-level">
+                            <li>
+                                <a href="/analysisProduct"> Product Wise</a>
+                            </li>
+                            <li>
+                                <a href="/analysisOutlet"> Outlet Wise</a>
+                            </li>
+                            <li>
+                                <a href="/analysisSupplier"> Supplier Wise</a>
+                            </li>
+                        </ul>
+                    </li>
+
+                    <li>
+                        <a href="/salesPrediction" class="waves-effect waves-dark"><i class="fas fa-database"></i> Sales Prediction</a>
+                    </li>
+
+                    <li>
+                        <a href="/aboutUs" class="waves-effect waves-dark"><i class="fa fa-info-circle"></i> About Us</a>
+                    </li>
+                </ul>
+                </div>
+            </nav>
+
+            <div id="page-wrapper">
+                <div class="header">
+                    <h1 class="page-header">
+                        Dashboard <small> Overview</small>
+                    </h1>
+
+                    <ol class="breadcrumb">
+                        <li><a href="#">Home</a></li>
+                        <li class="active"><a href="#">Dashboard</a></li>
+                        <li class="active">Data</li>
+                    </ol>
+                </div>
+
+                <div id="page-inner">
+
+<!-- ***********FIRST ROW CARDS*********** -->
+                    <div class="dashboard-cards">
+                        <div class="row">
+
+                            <div class="col-xs-12 col-sm-6 col-md-3">
+                            <div class="card horizontal cardIcon waves-effect waves-dark">
+                                <div class="card-image blue">
+                                    <i class="material-icons dp48">equalizer</i>
+                                </div>
+
+                                <div class="card-stacked blue">
+                                    <div class="card-content">
+                                        <h3>{{No_OF_Items}}</h3>
+                                    </div>
+
+                                    <div class="card-action">
+                                        <strong>PRODUCTS</strong>
+                                    </div>
+                                </div>
+                            </div>
+                            </div>
+
+                            <div class="col-xs-12 col-sm-6 col-md-3">
+                            <div class="card horizontal cardIcon waves-effect waves-dark">
+
+                                <div class="card-image red">
+                                    <i class="material-icons dp48">store</i>
+                                </div>
+
+                                <div class="card-stacked red">
+                                    <div class="card-content">
+                                        <h3>{{outletCounts}}</h3>
+                                    </div>
+
+                                    <div class="card-action">
+                                        <strong>OUTLETS</strong>
+                                    </div>
+                                </div>
+                            </div>
+                            </div>
+
+                            <div class="col-xs-12 col-sm-6 col-md-3">
+                            <div class="card horizontal cardIcon waves-effect waves-dark">
+
+                                <div class="card-image orange">
+                                    <i class="material-icons dp48">supervisor_account</i>
+                                </div>
+
+                                <div class="card-stacked orange">
+                                    <div class="card-content">
+                                        <h3>{{No_Of_Suppliers}}</h3>
+                                    </div>
+
+                                    <div class="card-action">
+                                        <strong>SUPPLIERS</strong>
+                                    </div>
+                                </div>
+                            </div>
+                            </div>
+
+                            <div class="col-xs-12 col-sm-6 col-md-3">
+                            <div class="card horizontal cardIcon waves-effect waves-dark">
+                                <div class="card-image green">
+                                    <i class="material-icons dp48">shopping_cart</i>
+                                </div>
+
+                                <div class="card-stacked green">
+                                    <div class="card-content">
+                                        <h3>$ {{Sales_sum}}</h3>
+                                    </div>
+
+                                    <div class="card-action">
+                                        <strong>SALES REVENUE</strong>
+                                    </div>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                    </div>
+
+<!-- ***********SECOND ROW CHARTS*********** -->
+                    <div class="row">
+
+                        <div class="col-md-6 col-xs-12 col-sm-12">
+                            <div class="card">
+                                <div class="card-action">
+                                    Number of Products in the market
+                                </div>
+
+                                <div class="card-image">
+                                    <canvas id="typeVSCountBar"></canvas>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6 col-xs-12 col-sm-12">
+                            <div class="card">
+                                <div class="card-action">
+                                    Sales Dependency on MPR :
+                                </div>
+
+                                <div class="card-image">
+                                    <canvas id="fatContentDonut"></canvas>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+<!-- ***********THIRD ROW CHARTS*********** -->
+
+                    <div class="row">
+                        <div class="col-md-12 col-xs-12 col-sm-12">
+                            <div class="card">
+                                <div class="card-action">
+                                    Monthly Average Sales
+                                </div>
+
+                                <div class="card-image">
+                                    <canvas id="monthlySalesAVG"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+<!-- ***********Fourth ROW CHARTS*********** -->
+
+                    <div class="row">
+                        <div class="col-md-6 col-xs-12 col-sm-12">
+                            <div class="card">
+                                <div class="card-action">
+                                    Tier Sales :
+                                </div>
+
+                                <div class="card-image">
+                                    <canvas id="tierWiseSales"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-xs-12 col-sm-12">
+                            <div class="card">
+                                <div class="card-action">
+                                    Outlet Wise Total Sales :
+                                </div>
+
+                                <div class="card-image">
+                                    <canvas id="outletWiseSales"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <!-- ***********Fifth ROW CHARTS*********** -->
+
+                    <div class="row">
+                        <div class="col-md-12 col-xs-12 col-sm-12">
+                            <div class="card">
+                                <div class="card-action">
+                                    Supplier Wise Total Sales :
+                        </div>
+
+                        <div class="card-image">
+                            <canvas id="supplierWiseSales" ></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+            </div>
+
+
+        </div>
+    </div>
+</div>
+
+
+
+{% include 'dashboardScript.html' %}
+    </body>
+</html>
